@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Message {
+  MessageId BigInt @id @default(autoincrement())
+  Sender    String @db.Uuid
+  Group     String @db.Uuid
+}
+
+model Groups {
+  GroupId   String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  GroupName String @db.VarChar
+}
+
+model GroupMembers {
+  GroupMemberId String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  MemberId      String    @db.Uuid
+  isStillJoined Boolean   @default(true)
+  joinDate      DateTime  @db.Time(6)
+  removedDate   DateTime? @db.Time(6)
+}
